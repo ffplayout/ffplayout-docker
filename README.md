@@ -3,4 +3,4 @@ Dockerized playout solution
 
 **This project is in progress!**
 
-**There is no working version and no release date!**
+**There is no working version and no release date yet!**
