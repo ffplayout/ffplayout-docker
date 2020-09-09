@@ -1,5 +1,5 @@
 ### Run:
-- `docker build --tag ffplayout-engine:1.0 .`
+- `docker build --squash --tag ffplayout-engine:1.0 .`
 -   ```
     docker run --name ffplayout-engine -p 5555:5555 \
     --volume /etc/ffplayout/ffplayout.yml:/etc/ffplayout/ffplayout.yml \
