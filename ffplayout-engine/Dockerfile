@@ -4,10 +4,10 @@ WORKDIR /opt/ffplayout-engine
 
 # install build tools and ffmpeg dependencies
 RUN apk update && \
-    apk add autoconf automake build-base gcc libtool yasm cmake curl mercurial git wget \
-        gperf expat-dev nasm zlib-dev yasm openssl-dev fontconfig-dev libxml2-dev \
-        gnu-libiconv libpng-dev fribidi-dev zeromq-dev freetype-dev lame-dev \
-        fdk-aac-dev opus-dev libvpx-dev libass-dev x264-dev x265-dev
+    apk add --no-cache autoconf automake build-base cmake gcc libtool gperf nasm yasm \
+        expat-dev zlib-dev openssl-dev fontconfig-dev libxml2-dev lame-dev \
+        gnu-libiconv libpng-dev fribidi-dev zeromq-dev freetype-dev opus-dev \
+        fdk-aac-dev libvpx-dev libass-dev x264-dev x265-dev
 
 # get ffplayout engine and install all dependencies
 RUN cd /opt && \
@@ -20,21 +20,22 @@ RUN cd /opt && \
 
 # build ffmpeg
 RUN cd /opt && \
-    git clone "https://github.com/FFmpeg/FFmpeg.git" && \
-    cd FFmpeg && \
+    wget "https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2" && \
+    tar xfvj ffmpeg-snapshot.tar.bz2 && \
+    rm ffmpeg-snapshot.tar.bz2 && \
+    cd ffmpeg && \
     ./configure --prefix="/usr/local/" --disable-debug --disable-doc --enable-gpl \
     --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-fontconfig \
     --enable-openssl --enable-libass --enable-libfdk-aac --enable-libfreetype \
     --enable-libfribidi --enable-libmp3lame --enable-libopus --enable-libvpx \
     --enable-libx264 --enable-libx265 --enable-libzmq && \
     make -j $(nproc | awk '{print $1 / 2}') && \
-    make install
+    make install && \
+    cd .. && \
+    rm -rf ffmpeg
 
 # cleanup
-RUN apk del autoconf automake build-base gcc libtool yasm cmake curl mercurial git \
-    gperf nasm yasm && \
-    cd /opt && \
-    rm -rf FFmpeg
+RUN apk del autoconf automake build-base cmake gcc libtool gperf nasm yasm
 
 EXPOSE 5555
 
