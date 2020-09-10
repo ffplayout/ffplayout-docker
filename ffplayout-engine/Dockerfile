@@ -9,7 +9,7 @@ RUN cd /opt && \
     mv 'ffplayout-engine-master' 'ffplayout-engine' && \
     rm master.zip && \
     cd ffplayout-engine && \
-    pip install -r requirements-base.txt && \
+    pip install --no-cache-dir -r requirements-base.txt && \
     mkdir /etc/ffplayout
 
 # install build tools, ffmpeg dependencies and compile ffmpeg
@@ -19,7 +19,7 @@ RUN apk update && \
         gnu-libiconv libpng-dev fribidi-dev zeromq-dev freetype-dev opus-dev \
         fdk-aac-dev libvpx-dev libass-dev x264-dev x265-dev && \
     # psutil needs gcc
-    pip install psutil && \
+    pip install --no-cache-dir psutil && \
     cd /opt && \
     wget "https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2" && \
     tar xfvj ffmpeg-snapshot.tar.bz2 && \

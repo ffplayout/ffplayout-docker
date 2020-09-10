@@ -11,7 +11,7 @@ RUN apk update && \
     mv 'ffplayout-api-master' 'ffplayout-api' && \
     rm master.zip && \
     cd ffplayout-api && \
-    pip install -r requirements-base.txt && \
+    pip install --no-cache-dir -r requirements-base.txt && \
     mkdir /etc/ffplayout && \
     # cleanup
     apk del build-base gcc linux-headers
