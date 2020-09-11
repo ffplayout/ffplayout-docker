@@ -27,15 +27,8 @@ sock.connect(server_address)
 try:
     # Send data
     sock.sendall(str.encode(stdin_args.message))
-
-    # Look for the response
-    amount_received = 0
-    amount_expected = len(stdin_args.message)
-
-    while amount_received < amount_expected:
-        data = sock.recv(8).decode('utf-8')
-        amount_received += len(data)
-        print('{}'.format(data))
+    data = sock.recv(8).decode('utf-8')
+    print('{}'.format(data))
 
 finally:
     sock.close()
