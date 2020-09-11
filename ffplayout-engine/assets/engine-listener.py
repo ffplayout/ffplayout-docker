@@ -4,22 +4,16 @@
 import logging
 import sys
 import time
-from logging.handlers import TimedRotatingFileHandler
 from subprocess import call
 
 from supervisor.childutils import listener
 
 
 def main(args):
-    logger = logging.getLogger('ffplayout-engine')
-    format = logging.Formatter('[%(asctime)s] [%(levelname)s]  %(message)s')
-    file_handler = TimedRotatingFileHandler('/var/log/ffplayout/service.log',
-                                            when='midnight',
-                                            backupCount=7)
-    file_handler.setFormatter(format)
-    logger.addHandler(file_handler)
-    logger.setLevel('INFO')
-    logger.info(79 * '-')
+    logging.basicConfig(
+        stream=sys.stdout, level=logging.INFO,
+        format='%(asctime)s %(levelname)s %(filename)s: %(message)s')
+    logger = logging.getLogger('socket-server')
 
     while True:
         logger.info('Listening for events...')
