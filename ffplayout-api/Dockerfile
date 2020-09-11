@@ -18,6 +18,8 @@ RUN apk update && \
 
 RUN cd /opt/ffplayout-api/ffplayout && \
     sed -i "s/---a-very-important-secret-key\:-generate-it-new---/$(python manage.py shell -c 'from django.core.management import utils; print(utils.get_random_secret_key())')/g" ffplayout/settings/production.py && \
+    sed -i "s/localhost/*/g" ffplayout/settings/production.py && \
+    sed -i "s/ffplayout.local/localhost:8001/g" ffplayout/settings/production.py && \
     sed -i "s/USE_SOCKET = False/USE_SOCKET = True/g" ffplayout/settings/common.py && \
     python manage.py makemigrations && \
     python manage.py migrate && \
@@ -28,4 +30,4 @@ RUN cd /opt/ffplayout-api/ffplayout && \
 WORKDIR /opt/ffplayout-api/ffplayout
 EXPOSE 8001
 
-CMD ["/usr/local/bin/gunicorn", "--workers", "4", "--worker-class=gevent", "--timeout", "10800", "--log-level=info", "--log-file=-", "--access-logfile=-", "--bind", "127.0.0.1:8001", "ffplayout.wsgi:application"]
+CMD ["/usr/local/bin/gunicorn", "--workers", "4", "--worker-class=gevent", "--timeout", "10800", "--log-level=info", "--log-file=-", "--access-logfile=-", "--bind", "0.0.0.0:8001", "ffplayout.wsgi:application"]
