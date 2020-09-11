@@ -33,7 +33,7 @@ try:
     amount_expected = len(stdin_args.message)
 
     while amount_received < amount_expected:
-        data = sock.recv(3).decode('utf-8')
+        data = sock.recv(8).decode('utf-8')
         amount_received += len(data)
         print('{}'.format(data))
 

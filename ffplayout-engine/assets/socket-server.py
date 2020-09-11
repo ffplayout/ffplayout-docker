@@ -3,7 +3,7 @@
 
 import signal
 import socket
-from subprocess import call
+from subprocess import call, check_output
 
 import psutil
 
@@ -35,8 +35,15 @@ def main(sock):
                     for proc in psutil.process_iter():
                         if 'ffplayout.py' in proc.cmdline():
                             proc.send_signal(signal.SIGHUP)
-
                     connection.send(b'200')
+                if data == b'status':
+                    print('get status from ffplayout-engine')
+                    status = check_output(
+                        ['supervisorctl', 'status', 'ffplayout-engine'])
+
+                    status = status.split()[1].encode()
+
+                    connection.send(status)
                 else:
                     break
 
