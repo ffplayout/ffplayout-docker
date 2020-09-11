@@ -1,0 +1,33 @@
+---
+version: '3'
+
+services:
+  ffplayout-api:
+    image: ffplayout-api
+    build: ffplayout-api/.
+    volumes:
+      - "/etc/ffplayout/ffplayout.yml:/etc/ffplayout/ffplayout.yml"
+      - "/var/log/logs:/var/log/ffplayout"
+      - "/tv-media:/tv-media"
+      - "/playlists:/playlists"
+    ports:
+      - "8001:8001"
+    restart: always
+  ffplayout-engine:
+    image: ffplayout-engine
+    build: ffplayout-engine/.
+    volumes:
+      - "/etc/ffplayout/ffplayout.yml:/etc/ffplayout/ffplayout.yml"
+      - "/var/log/logs:/var/log/ffplayout"
+      - "/tv-media:/tv-media"
+      - "/playlists:/playlists"
+    ports:
+      - "5555:5555"
+      - "64233:64233"
+    restart: always
+  ffplayout-frontend:
+    image: ffplayout-frontend
+    build: ffplayout-frontend/.
+    ports:
+      - "8088:80"
+    restart: always
