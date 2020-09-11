@@ -1,3 +1,5 @@
+For testing change *localhost* from: `"API_URL='http://localhost:8001'"` to your *host IP* in the **Dockerfile**
+
 ### Run:
 -   `docker build --tag ffplayout-frontend:master .`
 -   ```
