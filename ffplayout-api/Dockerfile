@@ -18,6 +18,7 @@ RUN apk update && \
 
 RUN cd /opt/ffplayout-api/ffplayout && \
     sed -i "s/---a-very-important-secret-key\:-generate-it-new---/$(python manage.py shell -c 'from django.core.management import utils; print(utils.get_random_secret_key())')/g" ffplayout/settings/production.py && \
+    sed -i "s/USE_SOCKET = False/USE_SOCKET = True/g" ffplayout/settings/common.py && \
     python manage.py makemigrations && \
     python manage.py migrate && \
     python manage.py collectstatic && \
