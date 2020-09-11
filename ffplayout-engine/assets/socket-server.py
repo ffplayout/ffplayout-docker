@@ -16,35 +16,27 @@ def main(sock):
 
             # Receive the data in small chunks and retransmit it
             while True:
-                data = connection.recv(16)
+                data = connection.recv(7)
 
                 if data == b'start':
                     print('start ffplayout-engine')
                     call(['supervisorctl', 'start', 'ffplayout-engine'])
-                    connection.send(
-                        ('HTTP/1.1 200 OK\nContent-Type: text/plain\n'
-                         '\nstarted ffplayout-engine\n').encode())
+                    connection.send(b'200')
                 if data == b'stop':
                     print('stop ffplayout-engine')
                     call(['supervisorctl', 'stop', 'ffplayout-engine'])
-                    connection.send(
-                        ('HTTP/1.1 200 OK\nContent-Type: text/plain\n'
-                         '\nstopped ffplayout-engine\n').encode())
+                    connection.send(b'200')
                 if data == b'restart':
                     print('restart ffplayout-engine')
                     call(['supervisorctl', 'restart', 'ffplayout-engine'])
-                    connection.send(
-                        ('HTTP/1.1 200 OK\nContent-Type: text/plain\n'
-                         '\nrestarted ffplayout-engine\n').encode())
+                    connection.send(b'200')
                 if data == b'reload':
                     print('reload ffplayout-engine')
                     for proc in psutil.process_iter():
                         if 'ffplayout.py' in proc.cmdline():
                             proc.send_signal(signal.SIGHUP)
 
-                    connection.send(
-                        ('HTTP/1.1 200 OK\nContent-Type: text/plain\n'
-                         '\nreloaded ffplayout-engine\n').encode())
+                    connection.send(b'200')
                 else:
                     break
 
