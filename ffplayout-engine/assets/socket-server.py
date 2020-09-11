@@ -5,7 +5,7 @@ import logging
 import signal
 import socket
 import sys
-from subprocess import call, check_output
+from subprocess import PIPE, Popen, call
 
 import psutil
 
@@ -45,8 +45,12 @@ def main(sock):
                     connection.send(b'200')
                 if data == b'status':
                     logger.debug('get status from ffplayout-engine...')
-                    status = check_output(
-                        ['supervisorctl', 'status', 'ffplayout-engine'])
+                    proc = Popen(
+                        ['supervisorctl', 'status', 'ffplayout-engine'],
+                        stdout=PIPE)
+
+                    status, err = proc.communicate()
+                    logger.debug('err: {}'.format(err))
 
                     status = status.split()[1]
 
